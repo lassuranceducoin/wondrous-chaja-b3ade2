@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Espace Assuré ORIAS 14007177 - masanteprofessionnelle.com</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:Inter,sans-serif;background:#F5F7FB} .card{max-width:720px;margin:40px auto;background:#fff;padding:32px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.06)} input,select{width:100%;padding:12px;border:1px solid #D0D7E3;border-radius:8px;margin:6px 0} .btn{background:#0F2C59;color:#fff;padding:14px;width:100%;border:none;border-radius:10px;font-weight:700;cursor:pointer} .footer{font-size:11px;color:#6B7A90;text-align:center;margin-top:20px} .error{color:#c00;font-size:12px;display:none}</style>
+</head><body>
+<div class="card">
+<h2>Espace Assuré Sécurisé</h2>
+<p style="font-size:12px;color:#00C896;font-weight:700">ORIAS n°14007177 - Courtier en assurances</p>
+<label>Email*<input id="email" type="email"></label>
+<label>Mot de passe*<input id="pwd" type="password"></label>
+<label>Mobile* 06/07 10 chiffres<input id="tel" maxlength="10" placeholder="06XXXXXXXX"></label>
+<div id="err" class="error">Numéro invalide : 10 chiffres, commence par 06 ou 07</div>
+<label>Type document (liste exhaustive)<select id="typeDoc">
+<option value="">-- Sélectionnez --</option>
+<option>1 - Pièce d'identité</option><option>2 - Carte Vitale</option><option>3 - Kbis / INSEE</option><option>4 - Attestation URSSAF / Caisse</option><option>5 - Certificat Ordre</option><option>6 - Avis échéance</option><option>7 - Tableau garanties</option><option>8 - RIB</option><option>9 - Justif revenus</option><option>10 - Questionnaire santé</option><option>11 - Statuts société</option><option>12 - Autre</option>
+</select></label>
+<label>Document<input type="file" accept=".pdf,.jpg,.png"></label>
+<div style="margin:12px 0"><input type="checkbox" id="rgpd"> <label for="rgpd" style="font-size:12px">J'accepte le traitement de mes données de santé par masanteprofessionnelle.com - ORIAS 14007177, hébergement HDS France, conforme RGPD. <a href="/confidentialite">Politique</a></label></div>
+<button class="btn" onclick="send()">Créer mon espace & Transmettre (Netlify + ORIAS 14007177)</button>
+<div class="footer">masanteprofessionnelle.com - Courtier ORIAS n°14007177 - www.orias.fr<br>Site déployé sur Netlify - Données sensibles hébergées HDS - DPO: dpo@masanteprofessionnelle.com</div>
+</div>
+<script>
+async function send(){
+ const tel=document.getElementById('tel').value;
+ const regex=/^0[67][0-9]{8}$/;
+ if(!regex.test(tel)){document.getElementById('err').style.display='block';return;}
+ if(!document.getElementById('rgpd').checked){alert('RGPD obligatoire');return;}
+ const res=await fetch('/api/creer-espace',{method:'POST',body:JSON.stringify({email:document.getElementById('email').value,password:document.getElementById('pwd').value,telephone:tel,rgpd:true})});
+ const data=await res.json();
+ if(data.ok){alert('OK ORIAS 14007177 - '+data.message); const conf=confirm('Confirmez-vous l\'envoi définitif de votre demande et documents ? Courtier ORIAS 14007177'); if(conf){ const t=await fetch('/api/transmettre-dossier',{method:'POST',body:JSON.stringify({confirmation:true,rgpd:true})}); alert('Dossier transmis - ORIAS 14007177'); } } else alert(data.error);
+}
+document.getElementById('tel').addEventListener('input',e=>{e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,10);});
+</script>
+</body></html>
